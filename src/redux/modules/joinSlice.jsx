@@ -13,9 +13,8 @@ export const joinThunk = createAsyncThunk(
   "joinSlice/joinThunk",
   async (payload, thunkAPI) => {
     try {
-      console.log("페이로드 데이터:", payload);
-      const response = await instance.post("/account/sign-up", payload);
-      console.log(instance.post);
+      const response = await instance.post("/user/join", payload);
+      // console.log(response);
       return thunkAPI.fulfillWithValue(response.data); //thunkAPI를 이용해 통신 성공할 시 값 반환
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response); //통신 실패시 에러값 반환
@@ -44,21 +43,16 @@ export const emailCheckThunk = createAsyncThunk(
   "joinSlice/emailCheckThunk",
   async (payload, thunkAPI) => {
     try {
-      const response = await instance.get(`/account/check-email`, {
-        params: {
-          email: payload,
-        },
+      const response = await instance.post("/user/auth", {
+        key: "email",
+        value: payload,
       });
-      console.log(response.config.params.email);
-      return thunkAPI.fulfillWithValue(response.config.params.email+"는 사용 가능한 이메일 입니다.");
-     
- //thunkAPI를 이용해 통신 성공할 시 값 반환
+      return thunkAPI.fulfillWithValue(response.data); //thunkAPI를 이용해 통신 성공할 시 값 반환
     } catch (emailerror) {
-      return thunkAPI.rejectWithValue("사용 불가능한 아이디"); //통신 실패시 에러값 반환
+      return thunkAPI.rejectWithValue(emailerror.response.data); //통신 실패시 에러값 반환
     }
   }
 );
-
 
 // email 인증번호 보내는 thunk함수
 // export const emailAuthThunk = createAsyncThunk(
@@ -90,7 +84,7 @@ const joinSlice = createSlice({
   extraReducers: {
     [joinThunk.fulfilled]: (state, action) => {
       //action.payload = response.data
-      alert("회원가입이 완료되었습니다.");
+      alert("가입이 완료되었습니다.");
       state.isJoinSucceed = true;
     },
     [joinThunk.rejected]: (state, action) => {

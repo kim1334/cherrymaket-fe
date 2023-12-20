@@ -6,45 +6,15 @@ import { useSelector } from "react-redux";
 import CartItems from "../components/CartList/CartItems";
 import jwtDecode from "jwt-decode";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { useState, useEffect } from "react";
 
 const Cart = () => {
   const CartList = useSelector((state) => state.cart.cart?.cart);
   const totalPrice = useSelector((state) => state.cart?.totalPrice);
-  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
-  const [userAddress, setUserAddress] = useState([]);
-  const baseUrl = process.env.REACT_APP_API;
-  const access_token = sessionStorage.getItem('accessToken');
 
   let userData = [];
-  if (sessionStorage.getItem("accessToken")) {
-  userData = jwtDecode(sessionStorage.getItem("accessToken"));
-}
-
-useEffect(() => {
-  async function fetchData() {
-    try {
-      const response = await axios.get(`${baseUrl}/customer/address/my-list`, {
-        headers: {
-          'Authorization': `Bearer ${access_token}`,
-        }
-      });
-      
-      setUserAddress(response.data[0].address + ' ' +response.data[0].addressDetail);
-
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  if (localStorage.getItem("token")) {
+    userData = jwtDecode(localStorage.token);
   }
-  fetchData();
-}, []);
-
-
-
-
-
-
 
   return (
     <>
@@ -66,14 +36,14 @@ useEffect(() => {
               <SearchLocation>
                 <h3>배송지</h3>
                 <div>
-                  {!isLoggedIn ? (
+                  {!userData.address ? (
                     <p>
                       <span>배송지를 등록</span>하고
                       <br />
                       구매 가능한 상품을 확인하세요!
                     </p>
                   ) : (
-                    <p>{userAddress}</p>
+                    <p>{userData.address}</p>
                   )}
                 </div>
                 {!userData.address && (

@@ -25,7 +25,7 @@ export const HeadUserLink = styled(Link)`
   cursor: pointer;
   background-color: transparent;
   text-decoration: none;
-  color: rgb(95, 0, 128);
+  color: rgb(149, 5, 38);
 `;
 
 export const HeadeVertical = styled.div`
@@ -50,7 +50,7 @@ export const ServiceNav = styled.div`
   position: absolute;
   right: 0px;
   top: 34px;
-  width: 90px;
+  width: 102px;
   padding: 3px 9px;
   border: 1px solid rgb(221, 221, 221);
   background-color: rgb(255, 255, 255);
@@ -91,7 +91,7 @@ export const HeadLeft = styled(Link)`
 export const LogoButton = styled.button`
   font-family: "Noto Sans KR", sans-serif;
   flex-shrink: 0;
-  margin-left: 20px;
+  // margin-left: 10px;
   font-size: 18px;
   font-weight: 100;
   line-height: 1.33;
@@ -100,7 +100,7 @@ export const LogoButton = styled.button`
   border-radius: 0;
   cursor: pointer;
   font-weight: 600;
-  color: #950526;
+  color: #e72956;
   border: none;
   background-color: inherit;
 `;
@@ -123,7 +123,7 @@ export const SearchForm = styled.div`
   width: 400px;
   height: 48px;
   padding-left: 14px;
-  border: 1px solid rgb(95, 0, 128);
+  border: 1px solid #c0163d;
   border-radius: 6px;
   background-color: rgb(255, 255, 255);
   box-shadow: rgb(247 247 247) 0px 0px 0px 1px inset;
@@ -217,21 +217,4 @@ export const HeadLogOut = styled.div`
 export const CustomerLink = styled(Link)`
 text-decoration: none;
 color: inherit;
-`;
-
-export const RatingIcon = styled.span`
-    display: inline-block;
-    min-width: 44px;
-    height: 16px;
-    margin-right: 6px;
-    padding: 0px 4px;
-    border-radius: 30px;
-    font-size: 10px;
-    line-height: 14px;
-    text-align: center;
-    letter-spacing: -0.3px;
-    vertical-align: 0px;
-    color: rgb(149, 5, 3);
-    border: 1px solid rgb(149, 5, 3);
-    background-color: rgb(255, 255, 255);
 `;
