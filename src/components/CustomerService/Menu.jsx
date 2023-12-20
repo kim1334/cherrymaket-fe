@@ -1,47 +1,62 @@
 import React from 'react';
 import styled from 'styled-components';
-import style, { FlexWrapper } from './Style';
-
+import { IoIosArrowForward } from "react-icons/io";
+import { useSelector } from 'react-redux';
 function Menu() {
-        return (
+    
+    const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+
+    const handleQnaClick = (e) => {
+        if (!isLoggedIn) {
+          e.preventDefault(); // 기본 링크 동작을 방지합니다.
+          alert('로그인 후 이용해주세요.'); // 알림을 표시합니다.
+          window.location.href = '/login'; // 로그인 페이지로 이동합니다.
+        } else {
+            // 로그인이 되어 있다면, 추가적인 조치는 필요하지 않습니다.
+            window.location.href = '/qna';
+        }
+
+      };
+
+    return (
         <>
         
-                <Container>
-                    <Title><h2>고객센터</h2></Title>
-                    <Customerul>
-                        <ul style={{listStyle : 'none'}}>
-                        <Customerli> 
-                            <li><a href = "notice">공지사항</a></li>
-                            <li><a href = "faq">자주하는질문</a></li>
-                            <li><a href = "qna">1:1문의</a></li>
-                            <li><a>대량 주문 문의</a></li>
-                        </Customerli>
-                        </ul>
-                    </Customerul>
-                    <Customera>
-                        <a>
-                            <div>
-                                <span>도움이 필요하신가요?</span>
-                                <span>1:1 문의하기</span>
-                            </div>
-                        </a>
-                    </Customera>
-                </Container>
-                 
+            <Container>
+                <Title><h2>고객센터</h2></Title>
+                <Customerul>
+                    <ul style={{listStyle : 'none'}}>
+                    <Customerli> 
+                        <li><a href = "notice">공지사항<IoIosArrowForward/></a></li>
+                        <li><a href = "faq">자주하는질문<IoIosArrowForward/></a></li>
+                        <li onClick = {handleQnaClick}><a>1:1문의<IoIosArrowForward/></a></li>
+                        <li><a>대량 주문 문의<IoIosArrowForward/></a></li>
+                    </Customerli>
+                    </ul>
+                </Customerul>
+                <Customera>
+                    <a onClick = {handleQnaClick}>
+                        <div>
+                            <span>도움이 필요하신가요?<br />
+                            1:1 문의하기</span>
+                        </div>
+                    </a>
+                </Customera>
+            </Container>
+                
         </>
     );
 };
 
 export default Menu;
 
-export const Container = styled.div`
+const Container = styled.div`
     width: 200px;
     height : 100%;
     margin-top : -30px;
     padding: 40px 0px;
     box-sizing: border-box;
 `;
-export const Title = styled.h2`
+const Title = styled.h2`
     height : 75px;
     padding : 5px 0 35px 1px;
     font-size: 20px;
@@ -50,14 +65,14 @@ export const Title = styled.h2`
     color : #333;
     letter-spacing: -1px;
 `;
-export const Customerul = styled.ul`
+const Customerul = styled.ul`
     border: 1px solid #f2f2f2;
     list-style: none;
     margin: 0px;
     padding: 0px;
 `;
 
-export const Customerli = styled.li`
+const Customerli = styled.li`
     display: list-item;
     text-align: -webkit-match-parent;
     & a {
@@ -81,7 +96,7 @@ export const Customerli = styled.li`
     }
 `;
 
-export const Customera = styled.a`
+const Customera = styled.a`
     cursor: pointer;
     width : 100%;
     height : 60px;

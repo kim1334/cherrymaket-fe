@@ -25,40 +25,26 @@ import Agreement from "./Agreement";
 function JoinForm() {
   const dispatch = useDispatch();
   const nav = useNavigate();
-
-
   const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
+    userId: "",
     password: "",
-    contact: "",
-    gender: "",
-    birthdate: "",
+    confirmPw: "",
+    nickName: "",
+    email: "",
     address: "",
-    detailAddress: "",
-    serviceAgreement: false,
-    privacyAgreement: false,
-    marketingAgreement: false,
   });
 
-  
-  const { name, email, password, confirmPw, contact, gender, birthdate, address, detailAddress, serviceAgreement ,privacyAgreement,marketingAgreement} = userInfo;
+  const { userId, password, confirmPw, nickName, email, address } = userInfo;
   const handleInput = (e) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  console.log(userInfo)
-  console.log(userInfo.serviceAgreement)
-  console.log(userInfo.privacyAgreement)
-  console.log(userInfo.marketingAgreement)
-
-
   // ! ------------ 여기부터 유효성 검사 로직 -----------------
   // 유효성 검사 룰
-  //const userIdRegEx = /^[a-zA-Z0-9]{4,8}$/; // ID >> 숫자 및 알파벳만 가능(4~8글자)
-  const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[A-Z])((?=.*\d)|(?=.*\W)).{6,20}$/; // Password >> 6~20글자 , 최소 1개 이상의 숫자 또는 특수문자 포함
-  //const nickNameRegEx = /^[가-힣a-zA-Z]{4,8}$/; // 닉네임 >> 한글 및 영문만 가능(4~8글자)
+  const userIdRegEx = /^[a-zA-Z0-9]{4,8}$/; // ID >> 숫자 및 알파벳만 가능(4~8글자)
+  const passwordRegEx = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/; // Password >> 6~20글자 , 최소 1개 이상의 숫자 또는 특수문자 포함
+  const nickNameRegEx = /^[가-힣a-zA-Z]{4,8}$/; // 닉네임 >> 한글 및 영문만 가능(4~8글자)
   const emailRegEx = /^[a-z0-9_+.-]+@([a-z0-9-]+\.)+[a-z0-9]{2,4}$/; // 이메일 >>
 
   // 인풋에 들어온 내용이 valid한가?(참/거짓)
@@ -69,20 +55,22 @@ function JoinForm() {
   const [isEmailValid, setIsEmailValid] = useState(false);
 
   // 유효성 검증 문구를 보여주는 useState모음
+  const [idRuleDesc, setIdRuleDesc] = useState("");
   const [pwRuleDesc, setPwRuleDesc] = useState("");
   const [ConfirmPwRuleDesc, setConfirmPwRuleDesc] = useState("");
+  const [nickNameRuleDesc, setNickNameRuleDesc] = useState("");
   const [emailRuleDesc, setEmailRuleDesc] = useState("");
 
   // ID 유효성 검증 이벤트함수
-  // const userIdValidation = () => {
-  //   if (userIdRegEx.test(userId)) {
-  //     setIsIdValid(true);
-  //     setIdRuleDesc("");
-  //   } else {
-  //     setIsIdValid(false);
-  //     setIdRuleDesc("4자 이상 8자 이하의 영문 및 숫자를 조합");
-  //   }
-  // };
+  const userIdValidation = () => {
+    if (userIdRegEx.test(userId)) {
+      setIsIdValid(true);
+      setIdRuleDesc("");
+    } else {
+      setIsIdValid(false);
+      setIdRuleDesc("4자 이상 8자 이하의 영문 및 숫자를 조합");
+    }
+  };
 
   // 패스워드 유효성 검증 이벤트함수
   const passwordValidation = () => {
@@ -92,7 +80,7 @@ function JoinForm() {
     } else {
       setIsPwValid(false);
       setPwRuleDesc(
-        "6자 이상 20자 이하의 영문 및 최소 1개이상의 대문자/숫자/특수문자의 조합"
+        "6자 이상 20자 이하의 영문 및 최소 1개이상의 숫자/특수문자의 조합"
       );
     }
   };
@@ -105,6 +93,17 @@ function JoinForm() {
     } else {
       setIsConfirmPwValid(false);
       setConfirmPwRuleDesc("동일한 비밀번호를 입력");
+    }
+  };
+
+  // 닉네임 유효성 검증 이벤트함수
+  const nickNameValidation = () => {
+    if (nickNameRegEx.test(nickName)) {
+      setIsNickNameValid(true);
+      setNickNameRuleDesc("");
+    } else {
+      setIsNickNameValid(false);
+      setNickNameRuleDesc("4자 이상 5자이하의 한글/영문");
     }
   };
 
@@ -123,17 +122,17 @@ function JoinForm() {
   const isEmailUsable = useSelector((state) => state.join.isEmailUsable);
 
   // 아이디 중복 확인 함수
-  // const userIdCheck = () => {
-  //   if (userId === "") {
-  //     alert("4자 이상 8자 이하의 영문 및 숫자를 조합");
-  //   } else {
-  //     if (isIdValid) {
-  //       dispatch(idCheckThunk(userId));
-  //     } else {
-  //       alert(idRuleDesc);
-  //     }
-  //   }
-  // };
+  const userIdCheck = () => {
+    if (userId === "") {
+      alert("4자 이상 8자 이하의 영문 및 숫자를 조합");
+    } else {
+      if (isIdValid) {
+        dispatch(idCheckThunk(userId));
+      } else {
+        alert(idRuleDesc);
+      }
+    }
+  };
 
   // 이메일 중복 확인 함수
   const emailCheck = () => {
@@ -141,15 +140,23 @@ function JoinForm() {
       alert("이메일 형식으로 입력해 주세요.");
     } else {
       if (isEmailValid) {
-        
         dispatch(emailCheckThunk(email));
-
       } else {
-        alert("");
+        alert(emailRuleDesc);
       }
     }
   };
-
+  // const SendEamilAuth = () => {
+  //   if (email === "") {
+  //     alert("이메일 형식으로 입력해 주세요.");
+  //   } else {
+  //     if (isEmailValid) {
+  //       dispatch(emailAuthThunk(email));
+  //     } else {
+  //       alert(emailRuleDesc);
+  //     }
+  //   }
+  // };
   // 모달창 로직(기본값이 false, 버튼 클릭시 true로 변경되면서 팝업)
   const [modal, setModal] = useState(false);
 
@@ -178,36 +185,32 @@ function JoinForm() {
     }
 
     // console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
-    fullAddress = fullAddress + detailAddress;
     setUserInfo({ ...userInfo, address: fullAddress }); // 가져온 fullAddress를 state에 저장!
   };
   const handleClick = () => {
     open({ onComplete: handleComplete });
   };
   // console.log(userInfo);
-
   // ! ------------------ 가입하기 버튼 --------------------------
   // 모든 항목을 만족했을 때만 submit!
   const SubmitData = (e) => {
     e.preventDefault();
-    // if (
-    //   userInfo.name.length > 0 &&
-    //   userInfo.address.length > 0 &&
-    //   isPwValid &&
-    //   isConfirmPwValid &&
-    //   isEmailValid === true
-    // ) {
-    //   if (isEmailUsable) {
-        dispatch(
-          joinThunk({ name, email, password, contact, gender, birthdate, serviceAgreement,privacyAgreement,marketingAgreement })
-        );
-        alert("회원가입이 완료되었습니다.");
-    //   } else {
-    //     alert("중복검사를 실시해주세요.");
-    //   }
-    // } else {
-    //   alert("모든 항목을 작성해주세요.");
-    // }
+    if (
+      userInfo.address.length > 0 &&
+      isIdValid &&
+      isPwValid &&
+      isConfirmPwValid &&
+      isNickNameValid &&
+      isEmailValid === true
+    ) {
+      if (isIdUsable && isEmailUsable) {
+        dispatch(joinThunk({ userId, nickName, password, email, address }));
+      } else {
+        alert("중복검사를 실시해주세요.");
+      }
+    } else {
+      alert("모든 항목을 작성해주세요.");
+    }
   };
 
   const isJoinSucceed = useSelector((state) => state.join.isJoinSucceed);
@@ -223,19 +226,109 @@ function JoinForm() {
       <StRow>
         <LabelWrapper>
           <label>
-            이름
+            아이디
             <span>*</span>
           </label>
         </LabelWrapper>
         <InputWrapper>
           <Input
             type="text"
-            name="name"
-            value={name}
+            name="userId"
+            value={userId}
             onChange={handleInput}
-            placeholder="이름을 입력해주세요"
+            placeholder="아이디를 입력해주세요"
             autoComplete="off"
+            onKeyUp={userIdValidation}
+            maxLength="9"
           />
+          <Validation>
+            <p>{idRuleDesc}</p>
+          </Validation>
+        </InputWrapper>
+        <BtnWrapper visibility="visible">
+          <Btn
+            type="button"
+            onClick={() => {
+              userIdCheck();
+            }}
+            disabled={isIdUsable}
+          >
+            중복확인
+          </Btn>
+        </BtnWrapper>
+      </StRow>
+      <StRow>
+        <LabelWrapper>
+          <label>
+            비밀번호
+            <span>*</span>
+          </label>
+        </LabelWrapper>
+
+        <InputWrapper>
+          <Input
+            type="password"
+            name="password"
+            value={password}
+            onChange={handleInput}
+            placeholder="비밀번호를 입력해주세요"
+            autoComplete="off"
+            onKeyUp={passwordValidation}
+            maxLength="21"
+          />
+          <Validation>
+            <p>{pwRuleDesc}</p>
+          </Validation>
+        </InputWrapper>
+        <BtnWrapper />
+      </StRow>
+      <StRow>
+        <LabelWrapper>
+          <label>
+            비밀번호확인
+            <span>*</span>
+          </label>
+        </LabelWrapper>
+
+        <InputWrapper>
+          <Input
+            type="password"
+            name="confirmPw"
+            value={confirmPw.value}
+            onChange={handleInput}
+            placeholder="비밀번호를 한번 더 입력해주세요"
+            autoComplete="off"
+            onKeyUp={confirmPwValidation}
+            maxLength="21"
+          />
+          <Validation>
+            <p>{ConfirmPwRuleDesc}</p>
+          </Validation>
+        </InputWrapper>
+        <BtnWrapper />
+      </StRow>
+      <StRow>
+        <LabelWrapper>
+          <label>
+            닉네임
+            <span>*</span>
+          </label>
+        </LabelWrapper>
+
+        <InputWrapper>
+          <Input
+            type="text"
+            name="nickName"
+            value={nickName.value}
+            onChange={handleInput}
+            placeholder="닉네임을 입력해주세요"
+            autoComplete="off"
+            onKeyUp={nickNameValidation}
+            maxLength="6"
+          />
+          <Validation>
+            <p>{nickNameRuleDesc}</p>
+          </Validation>
         </InputWrapper>
         <BtnWrapper />
       </StRow>
@@ -246,11 +339,12 @@ function JoinForm() {
             <span>*</span>
           </label>
         </LabelWrapper>
+
         <InputWrapper>
           <Input
             type="text"
             name="email"
-            value={userInfo.email}
+            value={email.value}
             onChange={handleInput}
             placeholder="이메일을 입력해주세요"
             autoComplete="off"
@@ -281,84 +375,10 @@ function JoinForm() {
       </StRow>
       <StRow>
         <LabelWrapper>
-          <label>
-            비밀번호
-            <span>*</span>
-          </label>
+          <label>주소</label>
+          <span>*</span>
         </LabelWrapper>
         <InputWrapper>
-          <Input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handleInput}
-            placeholder="비밀번호를 입력해주세요"
-            autoComplete="off"
-            onKeyUp={passwordValidation}
-            maxLength="21"
-          />
-          <Validation>
-            <p>{pwRuleDesc}</p>
-          </Validation>
-        </InputWrapper>
-        <BtnWrapper />
-      </StRow>
-      <StRow>
-        <LabelWrapper>
-          <label>
-            비밀번호확인
-            <span>*</span>
-          </label>
-        </LabelWrapper>
-        <InputWrapper>
-          <Input
-            type="password"
-            name="confirmPw"
-            value={confirmPw}
-            onChange={handleInput}
-            placeholder="비밀번호를 한번 더 입력해주세요"
-            autoComplete="off"
-            onKeyUp={confirmPwValidation}
-            maxLength="21"
-          />
-          <Validation>
-            <p>{ConfirmPwRuleDesc}</p>
-          </Validation>
-        </InputWrapper>
-        <BtnWrapper />
-      </StRow>
-
-      <StRow>
-        <LabelWrapper>
-          <label>
-            주소
-            <span>*</span>
-          </label>
-        </LabelWrapper>
-        <InputWrapper>
-          <Input
-            type="text"
-            name="address"
-            value={address}
-            onChange={handleInput}
-            placeholder="주소 검색을 해주세요"
-            autoComplete="off"
-            disabled
-          />
-            <Validation></Validation>
-          <Input
-          type="text"
-          name="detailAddress"
-          value={detailAddress}
-          onChange={handleInput}
-          placeholder="나머지 주소를 입력해주세요"
-          autoComplete="off"
-          />
-          <Validation>
-            <span>배송지에 따라 상품 정보가 달라질 수 있습니다.</span>
-          </Validation>
-        </InputWrapper>
-        <BtnWrapper visibility="visible">
           <Btn
             width="100%"
             fontSize="14px"
@@ -370,111 +390,17 @@ function JoinForm() {
               src="https://res.kurly.com/pc/service/cart/2007/ico_search.svg"
               alt="돋보기"
             />
-            주소검색
+            주소 검색
           </Btn>
-        </BtnWrapper>
-        {/* --------- 모달창 ------------- */}
-        {/* {modal ? (
-          <Modal modal={modal} setModal={setModal}>
-            {emailRuleDesc}
-          </Modal>
-        ) : null} */}
-      </StRow>
-      <StRow>
-        <LabelWrapper>
-          <label>
-            연락처
-            <span>*</span>
-          </label>
-        </LabelWrapper>
-        <InputWrapper>
-          <Input
-            type="text"
-            name="contact"
-            value={contact}
-            onChange={handleInput}
-            placeholder="010 - 0000 - 0000"
-            autoComplete="off"
-          />
+
           <Validation>
-            <span> - 포함 입력</span>
+            <span>배송지에 따라 상품 정보가 달라질 수 있습니다.</span>
           </Validation>
         </InputWrapper>
         <BtnWrapper />
       </StRow>
-      <StRow>
-  <LabelWrapper>
-    <label>성별
-    <span>*</span>
-    </label>
-  </LabelWrapper>
-  <InputWrapper>
-    <RadioLabel>
-      <RadioInput
-        type="radio"
-        name="gender"
-        value="MALE"
-        checked={gender === 'MALE'}
-        onChange={handleInput}
-      />
-       <CheckBoxSpan>
-      <CheckBoxDiv></CheckBoxDiv>
-      </CheckBoxSpan>
-      &nbsp;&nbsp;&nbsp;남자
-    </RadioLabel>
-    <RadioLabel>
-      <RadioInput
-        type="radio"
-        name="gender"
-        value="FEMALE"
-        checked={gender === 'FEMALE'}
-        onChange={handleInput}
-      />
-      <CheckBoxSpan>
-      <CheckBoxDiv></CheckBoxDiv>
-      </CheckBoxSpan>
-      &nbsp;&nbsp;&nbsp;여자
-    </RadioLabel>
-  </InputWrapper>
-</StRow>
-<StRow>
-  <LabelWrapper>
-    <label>
-      생년월일
-      <span>*</span>
-    </label>
-  </LabelWrapper>
-  <InputWrapper>
-    <Input
-      type="text"
-      name="birthdate"
-      //value={birthdate}
-      onChange={handleInput}
-      placeholder="YYYY - MM - DD"
-      autoComplete="off"
-      maxLength={10}
-    />
-      <Validation>
-            <span> - 포함 10글자</span>
-      </Validation>
-  </InputWrapper>
-  <BtnWrapper />
-</StRow>
       <Line />
-      <Agreement 
-        serviceAgreement={userInfo.serviceAgreement}
-        privacyAgreement={userInfo.privacyAgreement}
-        marketingAgreement={userInfo.marketingAgreement}
-        onServiceAgreementChange={(checked) =>
-          setUserInfo({ ...userInfo, serviceAgreement: checked })
-        }
-        onPrivacyAgreementChange={(checked) =>
-          setUserInfo({ ...userInfo, privacyAgreement: checked })
-        }
-        onMarketingAgreementChange={(checked) =>
-          setUserInfo({ ...userInfo, marketingAgreement: checked })
-        }
-      />
+      <Agreement />
       <SubmitBtnWrapper>
         <Btn
           fontSize="16px"
@@ -504,55 +430,3 @@ const SearchImg = styled.img`
   margin-right: 4px;
   vertical-align: middle;
 `;
-
-const RadioLabel = styled.label`
-  /* 라디오 버튼 스판(span)의 기본 스타일 */
-  position: relative;
-  display: flex;
-  -webkit-box-align: center;
-  align-items: center;
-  padding: 12px 0px 9px;
-  margin-right: 20px; /* 라디오 버튼 간격 */
-  cursor: pointer;
-
-  /* 선택된 라디오 버튼의 스판(span) 스타일 */
-  input[type="radio"]:checked + span {
-    background-color: rgb(149, 5, 38);
-  }
-`;
-
-const RadioInput = styled.input`
-  /* 라디오 버튼의 인풋(input) 요소 스타일 (숨겨진 스타일) */
-  overflow: hidden;
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  clip: rect(0px, 0px, 0px, 0px);
-  margin-right: 10px;
-`;
-
-const CheckBoxSpan = styled.span`
-  /* 라디오 버튼 스판(span)의 스타일 */
-  min-width: 24px;
-  min-height: 24px;
-  display: inline-block;
-  position: relative;
-  border-radius: 50%;
-
-  /* 기본 배경색 */
-  background-color: white;
-  border: 1px solid rgb(221, 221, 221);
-`;
-
-const CheckBoxDiv = styled.div`
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background-color: white;
-`;
-
-

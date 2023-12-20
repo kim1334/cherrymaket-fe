@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 const initialState = {
   user: {},
   isLoggedIn: false,
+  userId: null,
 };
 
 // 로그인 thunk
@@ -27,11 +28,13 @@ const loginSlice = createSlice({
   initialState,
   reducers: {
     initializeLogin: (state) => {
+      
       const token = sessionStorage.getItem("accessToken"); // 세션 스토리지에서 토큰 가져오기
       if (token) {
         state.isLoggedIn = true;
         const decoded = jwt_decode(token);
         state.user = decoded;
+        console.log(state.user);
       } else {
         state.isLoggedIn = false;
         state.user = {};
@@ -54,6 +57,8 @@ const loginSlice = createSlice({
     }
   },
 });
+
+
 
 export const { initializeLogin } = loginSlice.actions;
 

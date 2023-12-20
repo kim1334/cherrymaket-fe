@@ -12,40 +12,41 @@ import googleIcon from "../../assets/googleIcon.png";
 
 
 function LoginForm() {
+  
 
-const nav = useNavigate();
-const dispatch = useDispatch();
-
-const [email, onIdHandler] = useInput("");
-const [password, onPasswordHandler] = useInput("");
-
-const isLoggedIn = useSelector((state => state.login.isLoggedIn));
-
-const submitHandler = (e) => {
-  e.preventDefault();
-  if (email === "" || password === "") {
-    alert("아이디 혹은 비밀번호를 입력해주세요");
-    return;
-  }
-
-  // loginThunk 액션을 디스패치합니다.
-  dispatch(loginThunk({ email, password }));
-};
-
-// 로그인 상태(isLoggedIn)가 업데이트 되면, 메인 페이지로 리디렉트 합니다.
-useEffect(() => {
-  if (isLoggedIn) {
-    nav("/");
-  }
-}, [isLoggedIn, nav]);
-
-// 로컬 스토리지에 토큰이 있으면 메인 페이지로 이동합니다.
-useEffect(() => {
-  const loginCheck = localStorage.getItem("token");
-  if (loginCheck) {
-    nav("/");
-  }
-}, [nav]);
+  const nav = useNavigate();
+  const dispatch = useDispatch();
+  
+  const [email, onIdHandler] = useInput("");
+  const [password, onPasswordHandler] = useInput("");
+  
+  const isLoggedIn = useSelector((state => state.login.isLoggedIn));
+  
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (email === "" || password === "") {
+      alert("아이디 혹은 비밀번호를 입력해주세요");
+      return;
+    }
+  
+    // loginThunk 액션을 디스패치합니다.
+    dispatch(loginThunk({ email, password }));
+  };
+  
+  // 로그인 상태(isLoggedIn)가 업데이트 되면, 메인 페이지로 리디렉트 합니다.
+  useEffect(() => {
+    if (isLoggedIn) {
+      nav("/");
+    }
+  }, [isLoggedIn, nav]);
+  
+  // 로컬 스토리지에 토큰이 있으면 메인 페이지로 이동합니다.
+  useEffect(() => {
+    const loginCheck = localStorage.getItem("token");
+    if (loginCheck) {
+      nav("/");
+    }
+  }, [nav]);
 
   return (
     <Container>
@@ -87,7 +88,7 @@ useEffect(() => {
               width="100%"
               height="54px"
               border="0px none"
-              backgroundColor="#5f0080"
+              backgroundColor="rgb(149, 5, 38);"
               color="white"
               fontSize="16px"
               onClick={submitHandler}
@@ -100,6 +101,8 @@ useEffect(() => {
               width="100%"
               height="54px"
               fontSize="16px"
+              color = "rgb(149, 5, 38);"
+              border = "1px solid rgb(149, 5, 38);"
               onClick={() => nav("/join")}
             >
               회원가입

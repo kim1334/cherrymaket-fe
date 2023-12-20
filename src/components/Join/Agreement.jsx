@@ -1,69 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Checkbox } from "./checkbox.svg";
-import { useState } from "react";
-import { useEffect } from "react";
 
-const Agreement = ({
-  onServiceAgreementChange,
-  onPrivacyAgreementChange,
-  onMarketingAgreementChange,
-}) => {
-  const [serviceAgreement, setServiceAgreement] = useState(false);
-  const [privacyAgreement, setPrivacyAgreement] = useState(false);
-  const [marketingAgreement, setMarketingAgreement] = useState(false);
-  const [allAgreements, setAllAgreements] = useState(false);
-
-  // 전체 동의 체크박스 클릭 시
-  const handleCheckAll = () => {
-    const newValue = !allAgreements;
-    setAllAgreements(newValue);
-    setServiceAgreement(newValue);
-    setPrivacyAgreement(newValue);
-    setMarketingAgreement(newValue);
-    // 개별 동의 항목의 값을 상위 컴포넌트로 전달
-    onServiceAgreementChange(newValue);
-    onPrivacyAgreementChange(newValue);
-    onMarketingAgreementChange(newValue);
-  };
-
-  
-
-  // 개별 동의 체크박스 클릭 시
-  const handleServiceAgreementChange = () => {
-    const newValue = !serviceAgreement;
-    setServiceAgreement(newValue);
-    // 상위 컴포넌트로 전달
-    onServiceAgreementChange(newValue);
-  };
-
-  const handlePrivacyAgreementChange = () => {
-    const newValue = !privacyAgreement;
-    setPrivacyAgreement(newValue);
-    // 상위 컴포넌트로 전달
-    onPrivacyAgreementChange(newValue);
-  };
-
-  const handleMarketingAgreementChange = () => {
-    const newValue = !marketingAgreement;
-    setMarketingAgreement(newValue);
-    // 상위 컴포넌트로 전달
-    onMarketingAgreementChange(newValue);
-  };
-
+function Agreement() {
   return (
     <AgreementSection>
       <div>
-        <label>이용약관동의</label>
+        <label>
+          이용약관동의
+          {/* <span style={{ color: "#ee6a7b" }}>*</span> */}
+        </label>
       </div>
       <div>
         <AgreeAll>
           <label>
-            <CheckboxInput
-              type="checkbox"
-              checked={allAgreements}
-              onChange={handleCheckAll}
-            />
+            <CheckboxInput type="checkbox" />
             <ImageWrapper>
               <Checkbox />
             </ImageWrapper>
@@ -77,11 +28,7 @@ const Agreement = ({
         <AgreeOneItem>
           <div>
             <label>
-              <CheckboxInput
-                type="checkbox"
-                checked={serviceAgreement}
-                onChange={handleServiceAgreementChange}
-              />
+              <CheckboxInput type="checkbox" />
               <ImageWrapper>
                 <Checkbox />
               </ImageWrapper>
@@ -94,12 +41,7 @@ const Agreement = ({
         <AgreeOneItem>
           <div>
             <label>
-              <CheckboxInput
-                name="privacyAgreement"
-                type="checkbox"
-                checked={privacyAgreement}
-                onChange={handlePrivacyAgreementChange}
-              />
+              <CheckboxInput type="checkbox" />
               <ImageWrapper>
                 <Checkbox />
               </ImageWrapper>
@@ -112,12 +54,20 @@ const Agreement = ({
         <AgreeOneItem>
           <div>
             <label>
-              <CheckboxInput
-                name="marketingAgreement"
-                type="checkbox"
-                checked={marketingAgreement}
-                onChange={handleMarketingAgreementChange}
-              />
+              <CheckboxInput type="checkbox" />
+              <ImageWrapper>
+                <Checkbox />
+              </ImageWrapper>
+              개인정보 수집 및 이용 동의
+            </label>
+            <span>(선택)</span>
+          </div>
+          <Term>약관보기 {">"}</Term>
+        </AgreeOneItem>
+        <AgreeOneItem>
+          <div>
+            <label>
+              <CheckboxInput type="checkbox" />
               <ImageWrapper>
                 <Checkbox />
               </ImageWrapper>
@@ -129,11 +79,10 @@ const Agreement = ({
         </AgreeOneItem>
       </div>
     </AgreementSection>
-  )
-};
+  );
+}
 
 export default Agreement;
-
 const AgreementSection = styled.div`
   display: inline-flex;
   width: 100%;
@@ -182,10 +131,6 @@ const CheckboxInput = styled.input`
   clip-path: inset(50%);
   width: 1px;
   height: 1px;
-   &:checked + div {
-    background-color: rgb(149, 5, 38);
-  }
-  }
 `;
 const ImageWrapper = styled.div`
   display: inline-block;
@@ -218,7 +163,7 @@ const AgreeOneItem = styled.div`
 `;
 const Term = styled.p`
   padding-right: 22px;
-  color: rgb(149, 5, 38); // 변경된 색상
+  color: rgb(95, 0, 128);
   letter-spacing: 0px;
   text-decoration: none;
 `;
